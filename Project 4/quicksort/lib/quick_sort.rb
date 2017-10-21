@@ -47,4 +47,23 @@ class QuickSort
 
     barrier_idx
   end
+
+  def self.partition2(array, start, length, &prc)
+    prc ||= Proc.new { |el1, el2| el1 <=> el2 }
+
+    # To reduce probability of pathologically bad data set, shuffle pivot.
+    new_pivot = start + rand(length)
+    array[start], array[new_pivot] = array[new_pivot], array[start]
+
+    pivot_idx = start
+    pivot = array[start]
+
+    # This is the important part that swaps elements around a pivot_idx
+    ((start + 1)...(start + length)).each do |idx|
+      array[idx], array[pivot_idx + 1] = array[pivot_idx + 1], array[idx]
+      pivot_idx += 1
+    end
+
+    # ...
+  end
 end
