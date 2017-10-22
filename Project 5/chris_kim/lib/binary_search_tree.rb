@@ -106,26 +106,30 @@ class BinarySearchTree
 
   def one_child_promotion(node)
     child_node = node.right ? node.right : node.left
-    parent_node = node.parent
-
-    if parent_node.left == node
-      parent_node.left = child_node
-    else
-      parent_node.right = child_node
-    end
-    child_node.parent = parent_node
+    assign_new_parent_child_relationship(node, child_node)
   end
 
   def two_children_promotion(deleted_node)
-    largest_node_in_left = maximum(deleted_node.left)
-    parent_node = deleted_node.parent
+    max_node_in_left = maximum(deleted_node.left)
 
-    one_child_promotion(largest_node_in_left)
+    one_child_promotion(max_node_in_left)
 
-    deleted_node.left.parent = largest_node_in_left
-    deleted_node.right.parent = largest_node_in_left
+    deleted_node.left.parent = max_node_in_left
+    deleted_node.right.parent = max_node_in_left
 
-    largest_node_in_left.left = deleted_node.left
-    largest_node_in_left.right = deleted_node.right
+    max_node_in_left.left = deleted_node.left
+    max_node_in_left.right = deleted_node.right
+
+    assign_new_parent_child_relationship(deleted_node, max_node_in_left)
+  end
+
+  def assign_new_parent_child_relationship(node_1, node_2)
+    parent_node = node_1.parent
+    if parent_node.left == node_1
+      parent_node.left = node_2
+    else
+      parent_node.right = node_2
+    end
+    node_2.parent = parent_node
   end
 end

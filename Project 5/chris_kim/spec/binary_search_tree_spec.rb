@@ -103,7 +103,6 @@ describe BinarySearchTree do
     context 'if target node has two children' do
       it 'replaces target node with maximum of target\'s left tree' do
         parent_of_three = prefilled_bst.root
-        byebug
         prefilled_bst.delete(3)
 
         expect(parent_of_three.left.value).to eq(2)
