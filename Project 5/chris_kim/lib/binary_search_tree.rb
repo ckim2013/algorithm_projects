@@ -36,15 +36,17 @@ class BinarySearchTree
   end
 
   def delete(value)
-    found_node = find(value)
-    if no_children?(found_node) && @root.value == value
+    # Hibbard deletion
+    deleted_node = find(value)
+
+    if no_children?(deleted_node) && @root.value == value
       @root = nil
-    elsif no_children?(found_node)
-      simple_erase(found_node)
-    elsif one_child?(found_node)
-      one_child_promotion(found_node)
+    elsif no_children?(deleted_node)
+      simple_erase(deleted_node)
+    elsif one_child?(deleted_node)
+      one_child_promotion(deleted_node)
     else
-      two_children_promotion(found_node)
+      two_children_promotion(deleted_node)
     end
   end
 
@@ -55,9 +57,43 @@ class BinarySearchTree
   end
 
   def depth(tree_node = @root)
+    return 0 if tree_node.nil? || (tree_node.left.nil? && tree_node.right.nil?)
+    left = 0
+    right = 0
+    if tree_node.left && tree_node.right.nil?
+      left += 1
+      left += depth(tree_node.left)
+    end
+
+    if tree_node.right && tree_node.left.nil?
+      right += 1
+      right += depth(tree_node.right)
+    end
+
+    if tree_node.right && tree_node.left
+      left += 1
+      right += 1
+      left += depth(tree_node.left)
+      right += depth(tree_node.right)
+    end
+
+    left > right ? left : right
   end
 
   def is_balanced?(tree_node = @root)
+    return true if tree_node.nil?
+    return true if tree_node.left.nil? && tree_node.right.nil?
+    left_subtree = tree_node.left if tree_node.left
+    right_subtree = tree_node.right if tree_node.right
+
+    left_depth = depth(left_subtree)
+    right_depth = depth(right_subtree)
+
+    if (left_depth - right_depth).abs > 1 || !is_balanced?(left_subtree) || !is_balanced?(right_subtree)
+      false
+    else
+      true
+    end
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
@@ -98,10 +134,10 @@ class BinarySearchTree
     (node.left && node.right.nil?) || (node.right && node.left.nil?)
   end
 
-  def simple_erase(found_node)
-    parent_node = found_node.parent
-    parent_node.left = nil if parent_node.left == found_node
-    parent_node.right = nil if parent_node.right == found_node
+  def simple_erase(deleted_node)
+    parent_node = deleted_node.parent
+    parent_node.left = nil if parent_node.left == deleted_node
+    parent_node.right = nil if parent_node.right == deleted_node
   end
 
   def one_child_promotion(node)
@@ -125,11 +161,13 @@ class BinarySearchTree
 
   def assign_new_parent_child_relationship(node_1, node_2)
     parent_node = node_1.parent
+
     if parent_node.left == node_1
       parent_node.left = node_2
     else
       parent_node.right = node_2
     end
+
     node_2.parent = parent_node
   end
 end
