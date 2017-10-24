@@ -3,7 +3,6 @@ require 'byebug'
 # Implementing topological sort using both Khan's and Tarian's algorithms
 
 def topological_sort(vertices)
-  # byebug
   sorted = []
 
   top_queue = []
@@ -28,17 +27,8 @@ def topological_sort(vertices)
       end
 
     end
-    #
-    # current_node.out_edges.each do |edge|
-    #   # Need to figure out how to loop while deleting
-    #   neighbor = edge.to_vertex
-    #   edge.destroy!
-    #
-    #   if neighbor.in_edges.empty?
-    #     top_queue.push(neighbor)
-    #   end
-    # end
+    vertices.delete(current_node)
   end
 
-  sorted
+  vertices.empty? ? sorted : []
 end
