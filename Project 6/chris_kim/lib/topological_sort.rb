@@ -4,8 +4,10 @@ require 'byebug'
 
 def topological_sort(vertices)
   sorted = []
-
   top_queue = []
+  # vertices_hash = {}
+
+  # vertices.each { |vertex| vertices_hash[vertex] = true }
 
   vertices.each do |vertex|
     if vertex.in_edges.empty?
@@ -14,11 +16,11 @@ def topological_sort(vertices)
   end
 
   until top_queue.empty?
-    current_node = top_queue.pop
-    sorted << current_node
+    current_vertex = top_queue.shift
+    sorted << current_vertex
 
-    until current_node.out_edges.empty?
-      edge = current_node.out_edges[0]
+    until current_vertex.out_edges.empty?
+      edge = current_vertex.out_edges[0]
       neighbor = edge.to_vertex
       edge.destroy!
 
@@ -27,8 +29,10 @@ def topological_sort(vertices)
       end
 
     end
-    vertices.delete(current_node)
+    # vertices_hash.delete(current_vertex)
   end
 
-  vertices.empty? ? sorted : []
+  # vertices_hash.empty? ? sorted : []
+  # Or
+  sorted.length == vertices.length ? sorted : []
 end
