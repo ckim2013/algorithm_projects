@@ -17,7 +17,6 @@ describe 'Super Frog Hops' do
   end
 
   it 'handles cases where n > k' do
-    byebug
     expect(dp.super_frog_hops(6, 4).sort).to eq(ans1)
     expect(dp.super_frog_hops(10, 4).sort).to eq(ans2)
   end

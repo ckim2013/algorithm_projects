@@ -72,9 +72,15 @@ class DynamicProgramming
 
     res = []
 
-    (1..num_stairs).each do |i|
-      next if (i == num_stairs && num_stairs > max_stairs)
-      res += super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
+    if num_stairs < max_stairs
+      (1..num_stairs).each do |i|
+        next if (i == num_stairs && num_stairs > max_stairs)
+        res += super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
+      end
+    else
+      (1..max_stairs).each do |i|
+        res += super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
+      end
     end
 
     @super_frog_cache[num_stairs] = res
