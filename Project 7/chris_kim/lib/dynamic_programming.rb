@@ -70,17 +70,17 @@ class DynamicProgramming
   def super_frog_helper(num_stairs, max_stairs)
     return @super_frog_cache[num_stairs] if num_stairs < 2
 
+    prc = Proc.new do |i|
+      super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
+    end
+
+
     res = []
 
     if num_stairs < max_stairs
-      (1..num_stairs).each do |i|
-        next if (i == num_stairs && num_stairs > max_stairs)
-        res += super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
-      end
+      (1..num_stairs).each { |i| res += prc.call(i) }
     else
-      (1..max_stairs).each do |i|
-        res += super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
-      end
+      (1..max_stairs).each { |i| res += prc.call(i) }
     end
 
     @super_frog_cache[num_stairs] = res
