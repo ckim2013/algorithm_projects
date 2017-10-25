@@ -68,7 +68,10 @@ class DynamicProgramming
   end
 
   def super_frog_helper(num_stairs, max_stairs)
+    # Does not utilize dynamic programming I think...
     return @super_frog_cache[num_stairs] if num_stairs < 2
+
+    # return @super_frog_cache[num_stairs] if @super_frog_cache[num_stairs]
 
     prc = Proc.new do |i|
       super_frog_helper(num_stairs - i, max_stairs).map { |arr| [i] + arr }
@@ -85,6 +88,7 @@ class DynamicProgramming
 
     @super_frog_cache[num_stairs] = res
     @super_frog_cache[num_stairs]
+    res
   end
 
   def knapsack(weights, values, capacity)
